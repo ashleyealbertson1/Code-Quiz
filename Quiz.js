@@ -4,9 +4,10 @@ var answerAEl = document.getElementById('answerA');
 var answerBEl = document.getElementById('answerB');
 var answerCEl = document.getElementById('answerC');
 var answerDEl = document.getElementById('answerD');
-
+var answerInput = document.getElementById('userInitials').value;
 var score = 0;
 var storedHighScore = localStorage.getItem('highScore', score);
+var storedInitials = localStorage.getItem('userInitials', answerInput.value);
 
 var questions = [
 
@@ -49,10 +50,13 @@ function startQuiz() {
         .addEventListener("click", startQuiz)
 
 function quizOver() {
+    document.getElementById("inputSection").removeAttribute("class","hide");
     alert ("Quiz is Over!");
     if(score > storedHighScore) {
      localStorage.setItem('highScore', score);
+     
      showHighScore();
+     getInitials();
     }
 
 }
@@ -161,3 +165,15 @@ function showHighScore() {
 }
 
 showHighScore();
+
+
+function getInitials() {
+    var answerInput = document.getElementById('userInitials').value;
+    console.log(answerInput);
+}
+
+submitBtn.addEventListener("click", function(event) {
+    event.preventDefault(); 
+        getInitials();
+        alert('Your initials have been submitted')
+});
