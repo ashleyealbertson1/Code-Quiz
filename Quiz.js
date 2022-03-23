@@ -1,44 +1,163 @@
 //Create variables for ID elements in html doc
+var questionEl = document.getElementById('question');
+var answerAEl = document.getElementById('answerA');
+var answerBEl = document.getElementById('answerB');
+var answerCEl = document.getElementById('answerC');
+var answerDEl = document.getElementById('answerD');
+
+var score = 0;
+var storedHighScore = localStorage.getItem('highScore', score);
 
 var questions = [
 
     {
-        question: "What is my name?",
-        answerA: "Ashley",
-        answerB: "Krystle",
-        answerC: "Ashallan",
-        answerD: "Cynthia",
+        question: "JavaScript is a ___ -side programming language.",
+        answerA: "Both",
+        answerB: "Client",
+        answerC: "Server",
+        answerD: "None",
+        correctAnswer: "A"
     },
 
     {
-        question: "What is my son's name?",
-        answerA: "Cole",   
-        answerB: "Kyle",
-        answerC: "Brody",
-        answerD: "Mason",
+        question: "How do you find the minimum of x and y using JavaScript?",
+        answerA: "min(x,y);",   
+        answerB: " Math.min(xy)",
+        answerC: "Math.min(x,y)",
+        answerD: "min(xy);",
+        correctAnswer: "C"
     },
 
     {
-        question: "what kind of dog do I want?",
-        answerA: "Husky",
-        answerB: "Australian Shepherd",
-        answerC: "German Shepherd", 
-        answerD: "Poodle",
+        question: "Which are the correct “if” statements to execute certain code if “x” is equal to 2?",
+        answerA: "if(x = 2)",
+        answerB: "if(x == 2)",
+        answerC: " if(x != 2 )", 
+        answerD: "if(x 2)",
+        correctAnswer: "B"
     },
 ];
 
-var questionIndex = 0;
-var questionEl = document.getElementById('question');
-var answerAEl = document.getElementById('answerA');
 
-function showQuestion() {
-    document.getElementById('question').textContent = questions[0].question;
-    document.getElementById('answerA').textContent = questions[0].answerA;
-    document.getElementById('answerB').textContent = questions[0].answerB; 
-    document.getElementById('answerC').textContent = questions[0].answerC;
-    document.getElementById('answerD').textContent = questions[0].answerD;
+function startQuiz() {
+    document.getElementById("start").setAttribute("class", "hide")
+    document.getElementById("quizContainer")
+    showNextQuestion();
+    startTimer();   
 }
-showQuestion();
+    document.getElementById("start")
+        .addEventListener("click", startQuiz)
+
+function quizOver() {
+    alert ("Quiz is Over!");
+    if(score > storedHighScore) {
+     localStorage.setItem('highScore', score);
+     showHighScore();
+    }
+
+}
+
+var questionIndex = 0;
+function showNextQuestion() {
+    if(questionIndex >= questions.length) {
+        quizOver();
+    } else {
+    
+    questionEl.textContent = questions[questionIndex].question;
+    answerAEl.textContent = questions[questionIndex].answerA;
+    answerBEl.textContent = questions[questionIndex].answerB; 
+    answerCEl.textContent = questions[questionIndex].answerC;
+    answerDEl.textContent = questions[questionIndex].answerD;
+    }
+}
+
+answerAEl.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    if(questions[questionIndex].correctAnswer === "A") {
+        alert("Correct!");
+        calculateScore();
+    } else {
+        alert("Incorrect");
+        timeRemaining -=10
+    }
+
+    questionIndex++;
+    showNextQuestion();
+})
+
+answerBEl.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    if(questions[questionIndex].correctAnswer === "B") {
+        alert("Correct!");
+        calculateScore();
+    } else {
+        alert("Incorrect");
+        timeRemaining -=10
+    }
+
+    questionIndex++;
+    showNextQuestion();
+})
+
+answerCEl.addEventListener("click", function(event){
+    event.preventDefault();
+
+    if(questions[questionIndex].correctAnswer === "C") {
+        alert("Correct!");
+        calculateScore();
+    } else {
+        alert("Incorrect");
+        timeRemaining -=10
+    }
+
+    questionIndex++;
+    showNextQuestion();
+})
+
+answerDEl.addEventListener("click", function(event){
+    event.preventDefault();
+
+    if(questions[questionIndex].correctAnswer === "D") {
+        alert("Correct!");
+        calculateScore();
+    } else {
+        alert("Incorrect");
+        timeRemaining -=10;
+    }
+    console.log("Correct", score);
+
+    questionIndex++;
+    showNextQuestion();
+})
 
 
+var timeRemaining = 45;
+function startTimer() {
+    var timerInterval = setInterval(function () {
+        timeRemaining--;
 
+        if (timeRemaining === 0) {
+            clearInterval(timerInterval);
+            quizOver();
+        }
+
+        document.getElementById('timer').textContent = timeRemaining;
+    } ,1000);
+}
+
+
+function calculateScore() {
+    score++;
+    document.getElementById("scoreTotal").textContent = score;
+}
+
+
+function showHighScore() {
+    var storedHighScore = localStorage.getItem('highScore');
+    console.log(storedHighScore);
+    document.getElementById('highScore').textContent = storedHighScore;
+}
+
+showHighScore();
